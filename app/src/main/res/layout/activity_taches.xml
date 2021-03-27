@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    tools:context=".TachesActivity">
+
+    <EditText
+        android:id="@+id/edittitel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="50"
+        android:inputType="textPersonName"
+        android:text="Titel" />
+
+
+    <TextView
+        android:id="@+id/dateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Date  :"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/editdate"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="196dp"
+        android:layout_marginLeft="196dp"
+        android:layout_marginTop="-40dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="date"
+        android:text="jj.mm.aaaa"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:backgroundTint="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/timeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Time :"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/edittime"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="196dp"
+        android:layout_marginLeft="196dp"
+        android:layout_marginTop="-40dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="time"
+        android:text="hh : mm"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:backgroundTint="#FFFFFF" />
+
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="304dp"
+        android:layout_marginLeft="304dp"
+        android:layout_marginTop="300dp"
+        android:text="Save" />
+
+</LinearLayout>

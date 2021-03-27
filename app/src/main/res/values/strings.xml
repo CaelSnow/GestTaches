@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">GestDeTaches</string>
+    <string name="points_msg">Points : 0</string>
+</resources>
