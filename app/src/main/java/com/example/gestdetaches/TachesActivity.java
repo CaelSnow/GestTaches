@@ -2,39 +2,28 @@ package com.example.gestdetaches;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.gson.Gson;
+import com.gestdetaches.dbUtils.DbReader;
+import com.gestdetaches.dbUtils.DbWriter;
+import com.gestdetaches.models.Task;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class TachesActivity extends AppCompatActivity {
@@ -46,6 +35,8 @@ public class TachesActivity extends AppCompatActivity {
     private TextView date;
     private TextView time;
     private DatePickerDialog.OnDateSetListener DateSetListenner;
+    private DbWriter dataWriter;
+    private DbReader dataReader;
 
 
     @Override
@@ -57,6 +48,8 @@ public class TachesActivity extends AppCompatActivity {
         titel=(EditText) findViewById(R.id.edittitel);
         date=(TextView) findViewById(R.id.editdate);
         time=(TextView) findViewById(R.id.edittime);
+        dataWriter = new DbWriter(this);
+        dataReader = new DbReader(this);
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,15 +110,12 @@ public class TachesActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent previousActivity = new Intent(getApplicationContext(),MainActivity.class);
-                Tache tache = new Tache(titel.getText().toString(),date.getText().toString(),time.getText().toString());
-                previousActivity.putExtra("titel",tache.titel);
-                previousActivity.putExtra("date",tache.date);
-                previousActivity.putExtra("time",tache.time);
-
-
-
-
-
+                Task tache = new Task(titel.getText().toString(),date.getText().toString(),
+                        time.getText().toString());
+                dataWriter.addTaskOnDb(tache);
+                previousActivity.putExtra("titel",tache.getTitel());
+                previousActivity.putExtra("date",tache.getDate());
+                previousActivity.putExtra("time",tache.getTime());
                 setResult(1,previousActivity);
 
                  finish();

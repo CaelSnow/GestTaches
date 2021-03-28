@@ -6,12 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="401dp"
+        android:layout_width="match_parent"
         android:layout_height="38dp"
         android:text="Vos Activitées"
         android:textSize="30sp" />
@@ -20,18 +21,20 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="495dp"
-        android:orientation="vertical"></ListView>
+        android:orientation="vertical"
+        android:visibility="visible"></ListView>
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/moretaks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="300dp"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:contentDescription="TODO"
-        android:text="+"
-        android:textSize="30sp" />
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/submit"
+        android:src="@android:drawable/ic_input_add"
+        android:visibility="visible"
+        app:backgroundTint="#43C1FA"
+        app:rippleColor="#77A879" />
+
 
 </LinearLayout>

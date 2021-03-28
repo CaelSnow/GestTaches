@@ -1,46 +1,46 @@
 package com.example.gestdetaches;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.gestdetaches.dbUtils.DbReader;
+import com.gestdetaches.models.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class MainActivity extends AppCompatActivity {
 
       private static final  int Second_Call_ID = 1234;
-      private Button moretaks;
+      private FloatingActionButton moretaks;
       private  TextView tacheView;
       private ListView listView;
+      private ArrayAdapter listAdapter;
       public static final String SHARED_PREF = "sharedpref";
-    ArrayList<String> arrayList = new ArrayList<>();
+
+    private DbReader dbReader;
+    ArrayList<String> myTasks = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         moretaks = (Button) findViewById(R.id.moretaks);
+         moretaks = (FloatingActionButton ) findViewById(R.id.moretaks);
         listView = (ListView) findViewById(R.id.listView);
 
          moretaks.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +51,21 @@ public class MainActivity extends AppCompatActivity {
              }
          });
 
-
+             dbReader = new DbReader(this);
+             List<Task> taskFromDB = dbReader.getAllTasks();
+             if (dbReader.getAllTasks().size() != 0)
+             {
+                 for(Task tasks : dbReader.getAllTasks())
+                 {
+                     myTasks.add(tasks.toString());
+                 }
+                 listAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, myTasks);
+                 listView.setAdapter(listAdapter);
+             }
+             else
+             {
+                 System.out.println("NO TASKS ON THE DB");
+             }
 
     }
 
@@ -59,43 +73,46 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent previousActivity) {
         super.onActivityResult(requestCode, resultCode, previousActivity );
 
-
-
         if(requestCode == Second_Call_ID){
 
             if(resultCode == 1 || resultCode ==3 ) {
+                Task tache = new
+                        Task(previousActivity.getStringExtra("titel"),previousActivity.getStringExtra("date"),
+                        previousActivity.getStringExtra("time"));
+                updateListView(tache);
 
-                Tache tache = new Tache(previousActivity.getStringExtra("titel"),previousActivity.getStringExtra("date"),previousActivity.getStringExtra("time"));
+             }
+            }
+    }
 
+    private void updateListView(Task tache)
+    {
+        myTasks.add(tache.toString());
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myTasks);
+        listView.setAdapter(arrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-
-                arrayList.add(tache.afficherTache());
-
-                ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,arrayList);
-                listView.setAdapter(arrayAdapter);
-
-
-
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        Intent modifTache = new Intent(MainActivity.this,ModifiicationActivity.class);
-                        modifTache.putExtra("titel",tache.titel);
-                        modifTache.putExtra("date",tache.date);
-                        modifTache.putExtra("time",tache.time);
-                           startActivityForResult(modifTache,Second_Call_ID);
-
-                    }
-                });
+                Intent modifTache = new Intent(MainActivity.this,ModifiicationActivity.class);
+                modifTache.putExtra("titel",tache.getTitel());
+                modifTache.putExtra("date",tache.getDate());
+                modifTache.putExtra("time",tache.getTime());
+                startActivityForResult(modifTache,Second_Call_ID);
 
             }
-            }
+        });
+
+    }
+
+    private void initListView(Task tache)
+    {
 
 
     }
 
-
-
+    private static boolean doesDatabaseExist(Context context, String dbName) {
+        File dbFile = context.getDatabasePath(dbName);
+        return dbFile.exists();
+    }
 }
